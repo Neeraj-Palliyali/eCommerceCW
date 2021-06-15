@@ -358,7 +358,7 @@ class _EditProductFormState extends State<EditProductForm> {
       controller: titleFieldController,
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        hintText: "e.g., Samsung Galaxy F41 Mobile",
+        hintText: "e.g., Your product name",
         labelText: "Product Title",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -377,7 +377,7 @@ class _EditProductFormState extends State<EditProductForm> {
       controller: variantFieldController,
       keyboardType: TextInputType.name,
       decoration: InputDecoration(
-        hintText: "e.g., Fusion Green",
+        hintText: "e.g., what type of product is it",
         labelText: "Variant",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -396,8 +396,7 @@ class _EditProductFormState extends State<EditProductForm> {
       controller: highlightsFieldController,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-        hintText:
-            "e.g., RAM: 4GB | Front Camera: 30MP | Rear Camera: Quad Camera Setup",
+        hintText: "e.g., specifications",
         labelText: "Highlights",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
@@ -418,7 +417,7 @@ class _EditProductFormState extends State<EditProductForm> {
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
         hintText:
-            "e.g., This a flagship phone under made in India, by Samsung. With this device, Samsung introduces its new F Series.",
+            "e.g.,This is a priceless pieace if art. Took 3 years to make. Made by hand. Each brush stokes resemble the content",
         labelText: "Description",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),

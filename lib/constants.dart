@@ -3,15 +3,15 @@ import 'package:e_commerce_app_flutter/size_config.dart';
 
 const String appName = "E-Shopee";
 
-const kPrimaryColor = Color(0xFFFF7643);
-const kPrimaryLightColor = Color(0xFFFFECDF);
+const kPrimaryColor = Colors.blueAccent;
+const kPrimaryLightColor = Colors.amberAccent;
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
   colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
 );
-const kSecondaryColor = Color(0xFF979797);
-const kTextColor = Color(0xFF757575);
+const kSecondaryColor = Colors.black45;
+const kTextColor = Colors.black87;
 
 const kAnimationDuration = Duration(milliseconds: 200);
 

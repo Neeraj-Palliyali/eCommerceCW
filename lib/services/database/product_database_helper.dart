@@ -51,8 +51,10 @@ class ProductDatabaseHelper {
           product.variant.toString().toLowerCase().contains(query) ||
           product.seller.toString().toLowerCase().contains(query)) {
         productsId.add(product.id);
+        productsId.add(product.owner);
       }
     }
+
     return productsId.toList();
   }
 

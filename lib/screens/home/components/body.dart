@@ -231,7 +231,9 @@ class _BodyState extends State<Body> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProductDetailsScreen(productId: productId),
+        builder: (context) => ProductDetailsScreen(
+          productId: productId,
+        ),
       ),
     ).then((_) async {
       await refreshPage();

@@ -6,9 +6,11 @@ class SearchResultScreen extends StatelessWidget {
   final String searchQuery;
   final String searchIn;
   final List<String> searchResultProductsId;
+  final String productOwner;
 
   const SearchResultScreen({
     Key key,
+    @required this.productOwner,
     @required this.searchQuery,
     @required this.searchResultProductsId,
     @required this.searchIn,

@@ -73,7 +73,6 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
       validator: (value) {
         if (userNameFeildController.text.isEmpty) {
-          changeDisplayNameButtonCallback(userNameFeildController.text);
           return kUserNameError;
         }
         return null;
@@ -165,9 +164,9 @@ class _SignUpFormState extends State<SignUpForm> {
       String snackbarMessage;
       try {
         final signUpFuture = authService.signUp(
-          email: emailFieldController.text,
-          password: passwordFieldController.text,
-        );
+            email: emailFieldController.text,
+            password: passwordFieldController.text,
+            displayName: userNameFeildController.text);
         signUpFuture.then((value) => signUpStatus = value);
         signUpStatus = await showDialog(
           context: context,
@@ -203,8 +202,4 @@ class _SignUpFormState extends State<SignUpForm> {
       }
     }
   }
-}
-
-Future<void> changeDisplayNameButtonCallback(String userName) async {
-  await AuthentificationService().updateCurrentUserDisplayName(userName);
 }

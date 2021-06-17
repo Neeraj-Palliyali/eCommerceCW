@@ -107,10 +107,15 @@ class AuthentificationService {
     }
   }
 
-  Future<bool> signUp({String email, String password}) async {
+  Future<bool> signUp(
+      {String email, String password, String displayName}) async {
     try {
-      final UserCredential userCredential = await firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      final UserCredential userCredential =
+          await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await currentUser.updateProfile(displayName: displayName);
       final String uid = userCredential.user.uid;
       if (userCredential.user.emailVerified == false) {
         await userCredential.user.sendEmailVerification();
@@ -133,6 +138,7 @@ class AuthentificationService {
           throw FirebaseSignInAuthException(message: e.code);
       }
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
@@ -154,9 +160,7 @@ class AuthentificationService {
     return firebaseAuth.currentUser;
   }
 
-  Future<void> updateCurrentUserDisplayName(String updatedDisplayName) async {
-    await currentUser.updateProfile(displayName: updatedDisplayName);
-  }
+  Future<void> updateCurrentUserDisplayName(String updatedDisplayName) async {}
 
   Future<bool> resetPasswordForEmail(String email) async {
     try {

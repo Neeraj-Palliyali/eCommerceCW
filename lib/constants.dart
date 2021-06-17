@@ -38,6 +38,7 @@ const String kNamelNullError = "Please Enter your name";
 const String kPhoneNumberNullError = "Please Enter your phone number";
 const String kAddressNullError = "Please Enter your address";
 const String FIELD_REQUIRED_MSG = "This field is required";
+const String kUserNameError = "User Name is not entered";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

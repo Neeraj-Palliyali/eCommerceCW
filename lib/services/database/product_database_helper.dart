@@ -58,6 +58,18 @@ class ProductDatabaseHelper {
     return productsId.toList();
   }
 
+  Future<List<String>> findOwner(String productId) async {
+    final productDetails = await firestore
+        .collection(PRODUCTS_COLLECTION_NAME)
+        .doc(productId)
+        .get();
+
+    final ownerKey = await productDetails.data()[Product.OWNER_KEY];
+    Set ownerName = Set<String>();
+    ownerName.add(ownerKey);
+    return ownerName.toList();
+  }
+
   Future<bool> addProductReview(String productId, Review review) async {
     final reviewesCollectionRef = firestore
         .collection(PRODUCTS_COLLECTION_NAME)

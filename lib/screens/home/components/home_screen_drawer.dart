@@ -9,13 +9,13 @@ import 'package:e_commerce_app_flutter/screens/my_messages/seller_messages_scree
 import 'package:e_commerce_app_flutter/screens/my_orders/my_orders_screen.dart';
 import 'package:e_commerce_app_flutter/screens/my_products/my_products_screen.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
+import 'package:e_commerce_app_flutter/services/database/chats_database.dart';
 import 'package:e_commerce_app_flutter/services/database/user_database_helper.dart';
 import 'package:e_commerce_app_flutter/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
-import '../../change_display_name/change_display_name_screen.dart';
 
 class HomeScreenDrawer extends StatelessWidget {
   const HomeScreenDrawer({
@@ -150,7 +150,7 @@ class HomeScreenDrawer extends StatelessWidget {
         ),
       ),
       accountName: Text(
-        user.displayName ?? "No Name",
+        "",
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
@@ -201,22 +201,6 @@ class HomeScreenDrawer extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ChangeDisplayPictureScreen(),
-                ));
-          },
-        ),
-        ListTile(
-          title: Text(
-            "Change Display Name",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChangeDisplayNameScreen(),
                 ));
           },
         ),
@@ -393,4 +377,10 @@ class HomeScreenDrawer extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<String> userName(User user) async {
+  final name = await DatabaseMethods().userName(user.uid);
+
+  return name.join("");
 }

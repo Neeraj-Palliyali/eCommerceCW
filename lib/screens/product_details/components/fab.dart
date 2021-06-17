@@ -1,3 +1,7 @@
+import 'package:e_commerce_app_flutter/screens/conversation_screen/ConvsersationScreen.dart';
+import 'package:e_commerce_app_flutter/screens/single_chat_screen/single_chat_screen.dart';
+import 'package:e_commerce_app_flutter/services/database/chats_database.dart';
+import 'package:e_commerce_app_flutter/services/database/product_database_helper.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
 import 'package:e_commerce_app_flutter/services/database/user_database_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -118,7 +122,27 @@ class AddToCartFAB extends StatelessWidget {
                 }
                 return;
               }
-              // got to ma
+              final username = await UserDatabaseHelper().userName;
+              final response =
+                  await createChatRoomAndStartConversation(username, productId);
+              if (!response) {
+                SnackBar snackBar = SnackBar(
+                  content: Text(
+                    "Can't talk to yourself",
+                    textAlign: TextAlign.center,
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(milliseconds: 600),
+                );
+                ScaffoldMessenger.maybeOf(context).showSnackBar(snackBar);
+              } else {
+                // got to
+                // complete this messaging :)
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ConversationScreen()));
+              }
             },
             label: Text(
               "Message",
@@ -132,5 +156,36 @@ class AddToCartFAB extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+Future<bool> createChatRoomAndStartConversation(
+    String username, productId) async {
+  final uid2s = await ProductDatabaseHelper().findOwner(productId);
+  final uid2 = uid2s.join("");
+  final userName1 = await DatabaseMethods().userName(username);
+  final userName2 = await DatabaseMethods().userName(uid2);
+
+  List<String> users = [userName1.join(""), userName2.join("")];
+
+  if (username == uid2) {
+    return false;
+  } else {
+    String chatRoomId = getChatRoomId(username, uid2);
+    Map<String, dynamic> chatRoomMap = {
+      "users": users,
+      "chatroomId": chatRoomId
+    };
+
+    DatabaseMethods().createChatRoom(chatRoomId, chatRoomMap);
+    return true;
+  }
+}
+
+getChatRoomId(String a, String b) {
+  if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+    return "$b\_$a";
+  } else {
+    return "$a\_$b";
   }
 }

@@ -74,6 +74,11 @@ class UserDatabaseHelper {
     }
   }
 
+  Future<String> get userName async {
+    String uid = AuthentificationService().currentUser.uid;
+    return uid;
+  }
+
   Future<List> get usersFavouriteProductsList async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =

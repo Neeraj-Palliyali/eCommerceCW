@@ -3,6 +3,7 @@ import 'package:e_commerce_app_flutter/components/default_button.dart';
 import 'package:e_commerce_app_flutter/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 import 'package:e_commerce_app_flutter/exceptions/firebaseauth/signup_exceptions.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
+import 'package:e_commerce_app_flutter/services/database/chats_database.dart';
 import 'package:e_commerce_app_flutter/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
@@ -22,11 +23,14 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController confirmPasswordFieldController =
       TextEditingController();
 
+  final TextEditingController userNameFeildController = TextEditingController();
+
   @override
   void dispose() {
     emailFieldController.dispose();
     passwordFieldController.dispose();
     confirmPasswordFieldController.dispose();
+    userNameFeildController.dispose();
     super.dispose();
   }
 
@@ -39,6 +43,8 @@ class _SignUpFormState extends State<SignUpForm> {
             horizontal: getProportionateScreenWidth(screenPadding)),
         child: Column(
           children: [
+            buildUserNameFormField(),
+            SizedBox(height: getProportionateScreenHeight(40)),
             buildEmailFormField(),
             SizedBox(height: getProportionateScreenHeight(30)),
             buildPasswordFormField(),
@@ -52,6 +58,26 @@ class _SignUpFormState extends State<SignUpForm> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildUserNameFormField() {
+    return TextFormField(
+      controller: userNameFeildController,
+      obscureText: false,
+      decoration: InputDecoration(
+        hintText: "Create your userId",
+        labelText: "UserName",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        // Icons.person_add_alt_1,
+      ),
+      validator: (value) {
+        if (userNameFeildController.text.isEmpty) {
+          return kUserNameError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
@@ -154,6 +180,8 @@ class _SignUpFormState extends State<SignUpForm> {
         if (signUpStatus == true) {
           snackbarMessage =
               "Registered successfully, Please verify your email id";
+          final uid = AuthentificationService().currentUser.uid;
+          DatabaseMethods().uidToUserName(userNameFeildController.text, uid);
         } else {
           throw FirebaseSignUpAuthUnknownReasonFailureException();
         }

@@ -1,5 +1,4 @@
 import 'package:e_commerce_app_flutter/screens/conversation_screen/ConvsersationScreen.dart';
-import 'package:e_commerce_app_flutter/screens/single_chat_screen/single_chat_screen.dart';
 import 'package:e_commerce_app_flutter/services/database/chats_database.dart';
 import 'package:e_commerce_app_flutter/services/database/product_database_helper.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';

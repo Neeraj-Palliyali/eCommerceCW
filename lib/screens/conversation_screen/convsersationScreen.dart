@@ -15,7 +15,21 @@ class _ConversationScreenState extends State<ConversationScreen> {
   final String uid = FirebaseAuth.instance.currentUser.uid;
   TextEditingController messageController = new TextEditingController();
 
-  Widget ChatMessageList() {}
+  Stream chatMessageStream;
+
+  Widget chatMessageList() {
+    return StreamBuilder(
+        stream: chatMessageStream,
+        builder: (context, snapShot) {
+          return ListView.builder(
+              itemCount: snapShot.data.documents.length,
+              itemBuilder: (context, index) {
+                return MessageTile(
+                    // wither doc or documents
+                    snapShot.data.docs[index]["message"]);
+              });
+        });
+  }
 
   sendMessage() async {
     final userName = await DatabaseMethods().userName(uid);
@@ -24,8 +38,18 @@ class _ConversationScreenState extends State<ConversationScreen> {
         "message": messageController.text,
         "sendBy": userName.join(""),
       };
-      databaseMethods.getConversationMessages(widget.chatRoomId, messageMap);
+      databaseMethods.addConversationMessages(widget.chatRoomId, messageMap);
     }
+  }
+
+  @override
+  void initState() {
+    DatabaseMethods().getConversationMessages(widget.chatRoomId).then((value) {
+      setState(() {
+        chatMessageStream = value;
+      });
+    });
+    super.initState();
   }
 
   @override
@@ -35,6 +59,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       body: Container(
         child: Stack(
           children: [
+            chatMessageList(),
             Container(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -71,6 +96,20 @@ class _ConversationScreenState extends State<ConversationScreen> {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MessageTile extends StatelessWidget {
+  final String message;
+  MessageTile(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text(
+        message,
       ),
     );
   }

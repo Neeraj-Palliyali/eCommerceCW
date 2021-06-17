@@ -73,6 +73,7 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
       validator: (value) {
         if (userNameFeildController.text.isEmpty) {
+          changeDisplayNameButtonCallback(userNameFeildController.text);
           return kUserNameError;
         }
         return null;
@@ -202,4 +203,8 @@ class _SignUpFormState extends State<SignUpForm> {
       }
     }
   }
+}
+
+Future<void> changeDisplayNameButtonCallback(String userName) async {
+  await AuthentificationService().updateCurrentUserDisplayName(userName);
 }

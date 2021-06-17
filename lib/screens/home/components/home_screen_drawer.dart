@@ -150,7 +150,7 @@ class HomeScreenDrawer extends StatelessWidget {
         ),
       ),
       accountName: Text(
-        "",
+        user.displayName ?? "No Display Name" "",
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,

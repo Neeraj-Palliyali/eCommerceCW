@@ -8,6 +8,7 @@ import 'package:e_commerce_app_flutter/services/authentification/authentificatio
 import 'package:e_commerce_app_flutter/services/data_streams/all_products_stream.dart';
 import 'package:e_commerce_app_flutter/services/data_streams/favourite_products_stream.dart';
 import 'package:e_commerce_app_flutter/services/database/product_database_helper.dart';
+import 'package:e_commerce_app_flutter/services/database/user_database_helper.dart';
 import 'package:e_commerce_app_flutter/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
@@ -60,6 +61,8 @@ class _BodyState extends State<Body> {
     },
   ];
 
+  bool _anyFav = false;
+
   final FavouriteProductsStream favouriteProductsStream =
       FavouriteProductsStream();
   final AllProductsStream allProductsStream = AllProductsStream();
@@ -80,6 +83,10 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    UserDatabaseHelper()
+        .anyUserFavourite
+        .then((value) => _anyFav = value)
+        .catchError((e) => print(e));
     return SafeArea(
       child: RefreshIndicator(
         onRefresh: refreshPage,

@@ -125,6 +125,7 @@ class AddToCartFAB extends StatelessWidget {
               final username = await UserDatabaseHelper().userName;
               final response =
                   await createChatRoomAndStartConversation(username, productId);
+              final chatRoomId = await getChatId(username, productId);
               if (!response) {
                 SnackBar snackBar = SnackBar(
                   content: Text(
@@ -141,7 +142,7 @@ class AddToCartFAB extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ConversationScreen()));
+                        builder: (context) => ConversationScreen(chatRoomId)));
               }
             },
             label: Text(
@@ -157,6 +158,15 @@ class AddToCartFAB extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<String> getChatId(String username, productId) async {
+  final uid2s = await ProductDatabaseHelper().findOwner(productId);
+  final uid2 = uid2s.join("");
+
+  String chatRoomId = getChatRoomId(username, uid2);
+
+  return chatRoomId;
 }
 
 Future<bool> createChatRoomAndStartConversation(

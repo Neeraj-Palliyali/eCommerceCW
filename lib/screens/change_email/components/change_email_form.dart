@@ -4,6 +4,7 @@ import 'package:e_commerce_app_flutter/exceptions/firebaseauth/credential_action
 import 'package:e_commerce_app_flutter/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
+
 import 'package:e_commerce_app_flutter/size_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class ChangeEmailForm extends StatefulWidget {
 }
 
 class _ChangeEmailFormState extends State<ChangeEmailForm> {
+  bool _anyFav = null;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController currentEmailController = TextEditingController();
   final TextEditingController newEmailController = TextEditingController();

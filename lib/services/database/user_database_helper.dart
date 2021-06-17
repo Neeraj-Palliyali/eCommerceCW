@@ -85,7 +85,22 @@ class UserDatabaseHelper {
         firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final userDocData = (await userDocSnapshot.get()).data();
     final favList = userDocData[FAV_PRODUCTS_KEY];
+    print("$favList HERE");
     return favList;
+  }
+
+  Future<bool> get anyUserFavourite async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocData = (await userDocSnapshot.get()).data();
+    final favList = await userDocData[FAV_PRODUCTS_KEY];
+    final newFav = favList.toString();
+    if (newFav == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<bool> switchProductFavouriteStatus(

@@ -2,7 +2,6 @@ import 'package:e_commerce_app_flutter/screens/my_messages/components/chat_room_
 import 'package:e_commerce_app_flutter/services/database/chats_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../models/Chat.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -12,6 +11,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   final userName = FirebaseAuth.instance.currentUser.displayName;
+  bool _isLoaded = false;
+  bool _isOkay = false;
 
   Stream chatRoomsStream;
 
@@ -19,6 +20,9 @@ class _BodyState extends State<Body> {
     return StreamBuilder(
         stream: chatRoomsStream,
         builder: (context, snapShot) {
+          if (snapShot.data == null)
+            return Center(child: CircularProgressIndicator());
+
           return ListView.builder(
               itemCount: snapShot.data.documents.length,
               itemBuilder: (context, index) {
@@ -28,7 +32,8 @@ class _BodyState extends State<Body> {
                             ["chatroomId"],
                         userName: snapShot.data.documents[index]["chatroomId"]
                             .toString()
-                            .replaceAll(userName + "_", ""),
+                            .replaceAll(userName, "")
+                            .replaceAll("_", " "),
                       )
                     : Center(
                         child: CircularProgressIndicator(),
@@ -47,13 +52,18 @@ class _BodyState extends State<Body> {
     await databaseMethods.getChatRooms(userName).then((val) {
       setState(() {
         chatRoomsStream = val;
+        _isLoaded = true;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return chatRoomList();
+    return _isLoaded
+        ? chatRoomList()
+        : Center(
+            child: CircularProgressIndicator(),
+          );
   }
 }
 

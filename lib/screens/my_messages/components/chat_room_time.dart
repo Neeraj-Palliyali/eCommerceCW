@@ -27,7 +27,7 @@ class ChatRoomTile extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.blue, borderRadius: BorderRadius.circular(50)),
               child: Text(
-                "${userName.substring(0, 1).toUpperCase()}",
+                properName(userName),
               ),
             ),
             SizedBox(
@@ -42,4 +42,11 @@ class ChatRoomTile extends StatelessWidget {
       ),
     );
   }
+}
+
+String properName(String userName) {
+  if ("${userName.substring(0, 1).toUpperCase()}" == " ") {
+    return ("${userName.substring(1, 2).toUpperCase()}");
+  }
+  return "${userName.substring(0, 1).toUpperCase()}";
 }

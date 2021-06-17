@@ -1,11 +1,14 @@
+import 'package:e_commerce_app_flutter/screens/conversation_screen/message_bubble.dart';
 import 'package:e_commerce_app_flutter/services/authentification/authentification_service.dart';
 import 'package:e_commerce_app_flutter/services/database/chats_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../constants.dart';
 import 'package:flutter/material.dart';
 
 class ConversationScreen extends StatefulWidget {
   final String chatRoomId;
-  ConversationScreen(this.chatRoomId);
+  final String sellerName;
+  ConversationScreen(this.chatRoomId, this.sellerName);
   @override
   _ConversationScreenState createState() => _ConversationScreenState();
 }
@@ -18,28 +21,38 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Stream chatMessageStream;
 
   Widget chatMessageList() {
-    return StreamBuilder(
-        stream: chatMessageStream,
-        builder: (context, snapShot) {
-          return ListView.builder(
-              itemCount: snapShot.data.documents.length,
-              itemBuilder: (context, index) {
-                return MessageTile(
-                    // wither doc or documents
-                    snapShot.data.docs[index]["message"]);
-              });
-        });
+    return Container(
+      height: MediaQuery.of(context).size.height - 230,
+      child: StreamBuilder(
+          stream: chatMessageStream,
+          builder: (context, snapShot) {
+            if (snapShot.data == null)
+              return Center(child: CircularProgressIndicator());
+
+            return ListView.builder(
+                reverse: true,
+                itemCount: snapShot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return MessageBubble(
+                      snapShot.data.docs[index]["message"],
+                      snapShot.data.docs[index]["sendBy"] ==
+                          AuthentificationService().currentUser.displayName);
+                });
+          }),
+    );
   }
 
   sendMessage() async {
     final userName = await DatabaseMethods().userName(uid);
     if (messageController.text.isNotEmpty) {
-      Map<String, String> messageMap = {
+      Map<String, dynamic> messageMap = {
         "message": messageController.text,
         "sendBy": userName.join(""),
+        "time": DateTime.now().millisecondsSinceEpoch,
       };
       databaseMethods.addConversationMessages(widget.chatRoomId, messageMap);
     }
+    messageController.clear();
   }
 
   @override
@@ -55,7 +68,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          "${widget.sellerName.toUpperCase().replaceAll("_", " ")}",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Container(
         child: Stack(
           children: [
@@ -70,26 +88,23 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       child: TextField(
                         controller: messageController,
                         decoration: InputDecoration(
-                            // fillColor: Colors.lightBlue.shade600,
-                            hintText: "Message.....",
-                            hintStyle: TextStyle(color: Colors.blue.shade600),
-                            border: InputBorder.none),
+                          // fillColor: Colors.lightBlue.shade600
+                          hintText: "Message.....",
+                          hintStyle: TextStyle(color: Colors.blue.shade600),
+                          border: InputBorder.none,
+                        ),
+                        onChanged: (value) {},
                       ),
                     ),
-                    GestureDetector(
-                        onTap: () {},
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            print(AuthentificationService()
-                                .currentUser
-                                .displayName);
-                            sendMessage();
-                          },
-                          child: Icon(
-                            Icons.send_rounded,
-                            size: 40,
-                          ),
-                        )),
+                    IconButton(
+                        icon: Icon(
+                          Icons.send,
+                          size: 35,
+                          color: kPrimaryColor,
+                        ),
+                        onPressed: () {
+                          sendMessage();
+                        }),
                   ],
                 ),
               ),

@@ -125,7 +125,7 @@ class AddToCartFAB extends StatelessWidget {
               final response =
                   await createChatRoomAndStartConversation(username, productId);
               final chatRoomId = await getChatId(username, productId);
-              if (!response) {
+              if (!response[2]) {
                 SnackBar snackBar = SnackBar(
                   content: Text(
                     "Can't talk to yourself",
@@ -141,7 +141,8 @@ class AddToCartFAB extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ConversationScreen(chatRoomId)));
+                        builder: (context) =>
+                            ConversationScreen(chatRoomId, response[1])));
               }
             },
             label: Text(
@@ -162,13 +163,15 @@ class AddToCartFAB extends StatelessWidget {
 Future<String> getChatId(String username, productId) async {
   final uid2s = await ProductDatabaseHelper().findOwner(productId);
   final uid2 = uid2s.join("");
+  final userName1 = await DatabaseMethods().userName(username);
+  final userName2 = await DatabaseMethods().userName(uid2);
 
-  String chatRoomId = getChatRoomId(username, uid2);
+  String chatRoomId = getChatRoomId(userName1.join(""), userName2.join(""));
 
   return chatRoomId;
 }
 
-Future<bool> createChatRoomAndStartConversation(
+Future<List> createChatRoomAndStartConversation(
     String username, productId) async {
   final uid2s = await ProductDatabaseHelper().findOwner(productId);
   final uid2 = uid2s.join("");
@@ -176,18 +179,20 @@ Future<bool> createChatRoomAndStartConversation(
   final userName2 = await DatabaseMethods().userName(uid2);
 
   List<String> users = [userName1.join(""), userName2.join("")];
-
+  List response = [userName1.join(""), userName2.join("")];
   if (username == uid2) {
-    return false;
+    response.add(false);
+    return response;
   } else {
-    String chatRoomId = getChatRoomId(username, uid2);
+    String chatRoomId = getChatRoomId(userName1.join(""), userName2.join(""));
     Map<String, dynamic> chatRoomMap = {
       "users": users,
       "chatroomId": chatRoomId
     };
 
     DatabaseMethods().createChatRoom(chatRoomId, chatRoomMap);
-    return true;
+    response.add(true);
+    return response;
   }
 }
 

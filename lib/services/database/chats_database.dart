@@ -40,11 +40,19 @@ class DatabaseMethods {
     });
   }
 
+  getChatRooms(String userName) async {
+    return await FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .where("users", arrayContains: userName)
+        .snapshots();
+  }
+
   Future getConversationMessages(String chatRoomId) async {
     return await FirebaseFirestore.instance
         .collection(ROOMNAME)
         .doc(chatRoomId)
         .collection("chats")
+        .orderBy("time", descending: true)
         .snapshots();
   }
 }

@@ -47,6 +47,45 @@ class HomeScreenDrawer extends StatelessWidget {
               }),
           buildEditAccountExpansionTile(context),
           ListTile(
+            leading: Icon(Icons.message_rounded),
+            title: Text(
+              "My Messages",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),
+            ),
+            onTap: () async {
+              bool allowed = AuthentificationService().currentUserVerified;
+              if (!allowed) {
+                final reverify = await showConfirmationDialog(context,
+                    "You haven't verified your email address. This action is only allowed for verified users.",
+                    positiveResponse: "Resend verification email",
+                    negativeResponse: "Go back");
+                if (reverify) {
+                  final future = AuthentificationService()
+                      .sendVerificationEmailToCurrentUser();
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return FutureProgressDialog(
+                        future,
+                        message: Text("Resending verification email"),
+                      );
+                    },
+                  );
+                }
+                return;
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SellerMessagesScreen(),
+                ),
+              );
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.edit_location),
             title: Text(
               "Manage Addresses",
@@ -332,44 +371,6 @@ class HomeScreenDrawer extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => MyProductsScreen(),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          title: Text(
-            "My Messages",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-            ),
-          ),
-          onTap: () async {
-            bool allowed = AuthentificationService().currentUserVerified;
-            if (!allowed) {
-              final reverify = await showConfirmationDialog(context,
-                  "You haven't verified your email address. This action is only allowed for verified users.",
-                  positiveResponse: "Resend verification email",
-                  negativeResponse: "Go back");
-              if (reverify) {
-                final future = AuthentificationService()
-                    .sendVerificationEmailToCurrentUser();
-                await showDialog(
-                  context: context,
-                  builder: (context) {
-                    return FutureProgressDialog(
-                      future,
-                      message: Text("Resending verification email"),
-                    );
-                  },
-                );
-              }
-              return;
-            }
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SellerMessagesScreen(),
               ),
             );
           },

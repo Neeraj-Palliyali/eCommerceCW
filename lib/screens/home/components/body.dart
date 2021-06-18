@@ -45,11 +45,6 @@ class _BodyState extends State<Body> {
       PRODUCT_TYPE_KEY: ProductType.Fashion,
     },
     <String, dynamic>{
-      ICON_KEY: "assets/icons/Groceries.svg",
-      TITLE_KEY: "Groceries",
-      PRODUCT_TYPE_KEY: ProductType.Groceries,
-    },
-    <String, dynamic>{
       ICON_KEY: "assets/icons/Art.svg",
       TITLE_KEY: "Art",
       PRODUCT_TYPE_KEY: ProductType.Art,

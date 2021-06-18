@@ -1,8 +1,7 @@
 import 'package:e_commerce_app_flutter/components/rounded_icon_button.dart';
 import 'package:e_commerce_app_flutter/components/search_field.dart';
 import 'package:flutter/material.dart';
-
-import '../../../components/icon_button_with_counter.dart';
+import '../../../components/icon_button.dart';
 
 class HomeHeader extends StatelessWidget {
   final Function onSearchSubmitted;
@@ -29,9 +28,8 @@ class HomeHeader extends StatelessWidget {
           ),
         ),
         SizedBox(width: 5),
-        IconButtonWithCounter(
+        IconButtons(
           svgSrc: "assets/icons/Cart Icon.svg",
-          numOfItems: 0,
           press: onCartButtonPressed,
         ),
       ],

@@ -5,7 +5,6 @@ enum ProductType {
   Electronics,
   Books,
   Fashion,
-  Groceries,
   Art,
   Others,
 }

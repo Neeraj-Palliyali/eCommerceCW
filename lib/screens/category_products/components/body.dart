@@ -259,8 +259,6 @@ class _BodyState extends State<Body> {
         return "assets/images/books_banner.jpg";
       case ProductType.Fashion:
         return "assets/images/fashions_banner.jpg";
-      case ProductType.Groceries:
-        return "assets/images/groceries_banner.jpg";
       case ProductType.Art:
         return "assets/images/arts_banner.jpg";
       case ProductType.Others:

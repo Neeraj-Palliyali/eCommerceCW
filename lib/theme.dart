@@ -12,7 +12,7 @@ ThemeData theme() {
     inputDecorationTheme: inputDecorationTheme(),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.red,
       contentTextStyle: TextStyle(
         color: Colors.white,
       ),

@@ -6,7 +6,12 @@ class FavouriteProductsStream extends DataStream<List<String>> {
   void reload() {
     final favProductsFuture = UserDatabaseHelper().usersFavouriteProductsList;
     favProductsFuture.then((favProducts) {
-      addData(favProducts.cast<String>());
+      if (favProducts == null) {
+        addData([]);
+        print("No Products to show here");
+      } else {
+        addData(favProducts.cast<String>());
+      }
     }).catchError((e) {
       addError(e);
     });

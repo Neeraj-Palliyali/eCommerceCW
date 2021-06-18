@@ -7,7 +7,6 @@ class ChatRoomTile extends StatelessWidget {
   ChatRoomTile({this.userName, this.chatRoomId});
   @override
   Widget build(BuildContext context) {
-    print(chatRoomId);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -16,28 +15,38 @@ class ChatRoomTile extends StatelessWidget {
                 builder: (context) =>
                     ConversationScreen(chatRoomId, userName)));
       },
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(50)),
-              child: Text(
-                properName(userName),
+      child: Card(
+        elevation: 8,
+        color: Colors.grey,
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(25, 10, 15, 10),
+          child: Row(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(50)),
+                child: Text(
+                  properName(userName),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                ),
               ),
-            ),
-            SizedBox(
-              height: (MediaQuery.of(context).size.height) / 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(userName),
-            ),
-          ],
+              SizedBox(
+                height: (MediaQuery.of(context).size.height) / 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(userName),
+              ),
+            ],
+          ),
         ),
       ),
     );

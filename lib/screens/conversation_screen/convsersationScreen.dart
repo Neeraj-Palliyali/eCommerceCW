@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class ConversationScreen extends StatefulWidget {
   final String chatRoomId;
   final String sellerName;
+
   ConversationScreen(this.chatRoomId, this.sellerName);
   @override
   _ConversationScreenState createState() => _ConversationScreenState();
@@ -17,12 +18,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   final String uid = FirebaseAuth.instance.currentUser.uid;
   TextEditingController messageController = new TextEditingController();
+  FocusNode _focusNode = FocusNode();
 
   Stream chatMessageStream;
 
+  bool _inFocus = false;
+
   Widget chatMessageList() {
     return Container(
-      height: MediaQuery.of(context).size.height - 230,
+      height: _inFocus ? 300 : MediaQuery.of(context).size.height - 220,
       child: StreamBuilder(
           stream: chatMessageStream,
           builder: (context, snapShot) {
@@ -62,7 +66,26 @@ class _ConversationScreenState extends State<ConversationScreen> {
         chatMessageStream = value;
       });
     });
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          _inFocus = true;
+        });
+      } else {
+        setState(() {
+          _inFocus = false;
+        });
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,6 +101,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
         child: Stack(
           children: [
             chatMessageList(),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -93,6 +119,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           hintStyle: TextStyle(color: Colors.blue.shade600),
                           border: InputBorder.none,
                         ),
+                        focusNode: _focusNode,
                         onChanged: (value) {},
                       ),
                     ),
@@ -103,7 +130,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           color: kPrimaryColor,
                         ),
                         onPressed: () {
+                          setState(() {
+                            _inFocus = false;
+                          });
                           sendMessage();
+                          _focusNode.unfocus();
                         }),
                   ],
                 ),

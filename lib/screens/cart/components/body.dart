@@ -30,7 +30,8 @@ class _BodyState extends State<Body> {
   PersistentBottomSheetController bottomSheetHandler;
 
   Razorpay _razorpay;
-
+  
+  
   @override
   void initState() {
     super.initState();
@@ -38,10 +39,8 @@ class _BodyState extends State<Body> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    
     cartItemsStream.init();
-  }
-  Future totalFind<num> ()async{
-    return await UserDatabaseHelper().cartTotal;
   }
   @override
   void dispose() {
@@ -53,11 +52,11 @@ class _BodyState extends State<Body> {
     print("PaymentSuccesful");
   }
 
-  void openCheckout() {
-    print(totalFind);
+  void openCheckout()async {
+    
     var options = {
   'key': 'rzp_test_R4mjU1unUMgSQU',
-  'amount': '44',
+  'amount': await UserDatabaseHelper().cartTotal*100,
   'name': 'Acme Corp.',
   'description': 'Fine T-Shirt',
   'prefill': {

@@ -16,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:logger/logger.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../../utils.dart';
 
@@ -27,17 +28,59 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final CartItemsStream cartItemsStream = CartItemsStream();
   PersistentBottomSheetController bottomSheetHandler;
+
+  Razorpay _razorpay;
+
   @override
   void initState() {
     super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     cartItemsStream.init();
   }
-
+  Future totalFind<num> ()async{
+    return await UserDatabaseHelper().cartTotal;
+  }
   @override
   void dispose() {
     super.dispose();
     cartItemsStream.dispose();
+    _razorpay.clear();
   }
+  void _handlePaymentSuccess() {
+    print("PaymentSuccesful");
+  }
+
+  void openCheckout() {
+    print(totalFind);
+    var options = {
+  'key': 'rzp_test_R4mjU1unUMgSQU',
+  'amount': '44',
+  'name': 'Acme Corp.',
+  'description': 'Fine T-Shirt',
+  'prefill': {
+    'contact': '8888888888',
+    'email': 'me@gmail.com'
+    }
+  };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void _handlePaymentError() {
+    print(("Payment Error"));
+  }
+
+  void _handleExternalWallet() {
+    print("External Wallet");
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +145,7 @@ class _BodyState extends State<Body> {
                   bottomSheetHandler = Scaffold.of(context).showBottomSheet(
                     (context) {
                       return CheckoutCard(
-                        onCheckoutPressed: checkoutButtonCallback,
+                        onCheckoutPressed: openCheckout,
                       );
                     },
                   );

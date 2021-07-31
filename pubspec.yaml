@@ -43,6 +43,8 @@ dependencies:
   string_validator: ^0.1.4
   swipedetector: ^1.2.0
   url_launcher: ^5.7.10
+  razorpay_flutter: ^1.2.3
+  toast: ^0.1.5 
 
 dev_dependencies:
   flutter_test:

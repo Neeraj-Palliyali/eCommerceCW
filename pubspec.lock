@@ -400,7 +400,7 @@ packages:
       name: razorpay_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.7"
+    version: "1.2.6"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -462,7 +462,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
-<<<<<<< HEAD
   toast:
     dependency: "direct main"
     description:
@@ -470,8 +469,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
-=======
->>>>>>> 0876bfadaf99dc03b7d90312c381589a705cb312
   typed_data:
     dependency: transitive
     description:

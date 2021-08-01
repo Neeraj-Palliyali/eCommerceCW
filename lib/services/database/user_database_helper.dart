@@ -15,6 +15,8 @@ class UserDatabaseHelper {
   static const String DP_KEY = "display_picture";
   static const String FAV_PRODUCTS_KEY = "favourite_products";
 
+  static String PhoneNumber = "";
+
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance =
       UserDatabaseHelper._privateConstructor();
@@ -344,6 +346,7 @@ class UserDatabaseHelper {
     final userDocSnapshot =
         firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update({PHONE_KEY: phone});
+    PhoneNumber = phone;
     return true;
   }
 

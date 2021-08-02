@@ -15,7 +15,7 @@ class UserDatabaseHelper {
   static const String DP_KEY = "display_picture";
   static const String FAV_PRODUCTS_KEY = "favourite_products";
 
-  static String PhoneNumber = "";
+  // static String PhoneNumber = "";
 
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance =
@@ -62,6 +62,17 @@ class UserDatabaseHelper {
 
     await docRef.delete();
   }
+//Lokk HERTEA
+  Future <String> getPhoneNumber() async{
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocsSnapshot = firestore.collection("users").doc(uid);
+    final useData = (await userDocsSnapshot.get()).data();
+    final phoneNumber = useData["phone"];
+    return phoneNumber;
+  }
+
+
+
 
   Future<bool> isProductFavourite(String productId) async {
     String uid = AuthentificationService().currentUser.uid;
@@ -87,7 +98,6 @@ class UserDatabaseHelper {
         firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final userDocData = (await userDocSnapshot.get()).data();
     final favList = userDocData[FAV_PRODUCTS_KEY];
-    print("$favList HERE");
     return favList;
   }
 
@@ -346,7 +356,6 @@ class UserDatabaseHelper {
     final userDocSnapshot =
         firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update({PHONE_KEY: phone});
-    PhoneNumber = phone;
     return true;
   }
 

@@ -42,7 +42,8 @@ class _BodyState extends State<Body> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    print(UserDatabaseHelper.PhoneNumber);
+    
+    
     cartItemsStream.init();
   }
   @override
@@ -53,7 +54,7 @@ class _BodyState extends State<Body> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-  
+    
     // Toast.show("Success");
     // print("Success");
     final orderFuture = UserDatabaseHelper().emptyCart();
@@ -124,15 +125,16 @@ class _BodyState extends State<Body> {
   }
 
   void openCheckout()async {
+    // print();
     
-    
+    // print(await UserDatabaseHelper().getPhoneNumber());
     var options = {
   'key': 'rzp_test_R4mjU1unUMgSQU',
   'amount': await UserDatabaseHelper().cartTotal*100,
   'name': AuthentificationService().currentUser.displayName,
   'description': 'Your oder from CW',
   'prefill': {
-    'contact': UserDatabaseHelper.PhoneNumber,
+    'contact': await  UserDatabaseHelper().getPhoneNumber(),
     'email': AuthentificationService().currentUser.email
     }
   };
@@ -148,12 +150,12 @@ class _BodyState extends State<Body> {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     print(("Payment Error"));
-    
     Toast.show("failure", context);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     print("External Wallet");
+    Toast.show("failure", context,);
   }
 
 
